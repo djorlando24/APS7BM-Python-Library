@@ -57,8 +57,7 @@ def fcorrect_signal_trapping_fitted(hdf_file,dataset_names,line_energies,x_name=
     ALK.fwrite_HDF_dataset(hdf_file,output_name,output_array)
     print "File " + hdf_file.filename + " processed successfully."
     
-def fcorrect_signal_trapping_filename(filename,path='/home/beams/AKASTENGREN/SprayData/Cycle_2014_1/Radke/Time_Averaged_Fluorescence/',
-                                    dataset_names,line_energies,x_name='7bmb1:m26.VAL',
+def fcorrect_signal_trapping_filename(filename,path,dataset_names,line_energies,x_name='7bmb1:m26.VAL',
                                     output_name=None,ref_r0=0.0,fitting=True,degree=2):
     '''Convert DataGrabber file to HDF5 if the input is the name of the output
     file rather than an HDF5 object.  Simply makes an HDF5 File object
