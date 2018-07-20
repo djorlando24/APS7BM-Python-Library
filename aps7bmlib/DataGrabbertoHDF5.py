@@ -18,9 +18,7 @@ import h5py
 import sys
 import numpy as np
 #
-def fconvert_and_average_file(dg_filename,hdf_filename=None,
-                    path="/data/Data/SprayData/Cycle_2013_3/ISU/",
-                    group_keys = ("X","Y"), convert_volts=True,average=True):
+def fconvert_and_average_file(dg_filename,hdf_filename=None,path, group_keys = ("X","Y"), convert_volts=True,average=True):
     '''Convert DataGrabber file to HDF5 if the input is the name of the output
     file rather than an HDF5 object.  Simply makes an HDF5 File object
     and calls the converter based on the HDF5 File object.
@@ -32,9 +30,7 @@ def fconvert_and_average_file(dg_filename,hdf_filename=None,
     with h5py.File(path+hdf_filename,'w') as write_file:
         fconvert_and_average_h5py_hdffile(dg_filename,write_file,path,group_keys,convert_volts,average)
 
-def fconvert_and_average_h5py_hdffile(dg_filename,write_file,
-                    path="/home/beams/7BMB/SprayData/Cycle_2013_3/ISU/",
-                    group_keys = ("X","Y"), convert_volts=True, average=True):
+def fconvert_and_average_h5py_hdffile(dg_filename,write_file, path, group_keys = ("X","Y"), convert_volts=True, average=True):
     '''Convert DataGrabber file to HDF5.  Input h5py object,
     not hdf file name.
     '''
@@ -108,7 +104,7 @@ def fconvert_and_average_h5py_hdffile(dg_filename,write_file,
     write_file.close()
 
 def fbatch_conversion(file_nums,dg_filename_prefix='Scan_',dg_filename_suffix='.dat',
-                    digits=4, path="/data/Data/SprayData/Cycle_2013_3/ISU/",
+                    digits=4, path="/path/to/directory",
                     group_keys = ("X","Y"), convert_volts=True, average=True):
     '''Class to batch process a large number of DataGrabber files.
     Should work with strings or numbers given in file_nums list.

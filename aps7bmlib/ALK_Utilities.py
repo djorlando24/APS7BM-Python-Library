@@ -52,7 +52,7 @@ def fcreate_filename(file_num,filename_prefix='7bmb1_',filename_suffix='.mda',
         return filename_prefix+str(file_num)+filename_suffix
 
 def fcreate_filename_list(file_nums,filename_prefix='7bmb1_',filename_suffix='.mda',
-                    digits=4, path="/data/Data/SprayData/Cycle_2014_1/ISU_Point/",
+                    digits=4, path="/path/to/directory",
                     check_exist=False):
     '''Takes a list of file number, a prefix, a suffix, path, and # of digits,
     and makes a list of the file names.
@@ -69,7 +69,7 @@ def fcreate_filename_list(file_nums,filename_prefix='7bmb1_',filename_suffix='.m
     return filename_list
 
 def fcheck_files_exist(file_nums,filename_prefix='7bmb1_',filename_suffix='.mda',
-                    digits=4, path="/data/Data/SprayData/Cycle_2014_1/ISU_Point/"):
+                    digits=4, path="/path/to/directory"):
     '''Creates filenames and checks to see if they exist.
     Returns a list of those file numbers that do exist.
     '''

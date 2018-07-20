@@ -14,7 +14,7 @@ import math
 import os.path
 
 #Important variables needed everywhere
-path='/data/Data/SprayData/Cycle_2014_1/ISU_Point/'
+path='/path/to/directory'
 base_names = ['Zn','Cu','Ni','Co','Elastic']
 branching_ratios = [17.0/151.0]*5
 K_alpha_energies = [8.631,8.04,7.472,6.925,10.5]
