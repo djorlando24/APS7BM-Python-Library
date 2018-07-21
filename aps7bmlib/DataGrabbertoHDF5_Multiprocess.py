@@ -13,36 +13,39 @@ May 5, 2014: Add method for batch processing.
 February 19, 2015: Major rewrite, allowing for batch processing with multiprocessing.
 February 19, 2015: Make pertinent variables module attributes, rather than function arguments.
 
+July 20, 2018: DD moved file_path from a global variable to a header, add path support to batch processing.
+               Add wildcard support using glob to batch processing.
+               Use os module to improve hdf filename autogeneration logic.
 """
 import readdatagrabber as rdg
 import h5py
-import sys
+import sys, os
 import numpy as np
 import multiprocessing
 
-#Set module attributes
+#Set default module attributes
 dg_filename_prefix='Scan_'
 dg_filename_suffix='.dat'
-hdf_filename = None
+hdf_filename=None
 digits=4
-file_path="/path/to/files"
 location_keys = ("X","Y")
 convert_volts=True
-processors=3
+processors=4
 location_tolerance = 3e-3   #How close must coordinates be to be considered the same.
 write_datatype = 'f4'
 #
-def fconvert_file(dg_filename,hdf_filename=None):
+def fconvert_file(dg_filename,hdf_filename=None,file_path=""):
     '''Convert DataGrabber file to HDF5 if the input is the name of the output
     file rather than an HDF5 object.  Simply makes an HDF5 File object
     and calls the converter based on the HDF5 File object.
     '''
     #Make up an approrpiate output file name if none is given
     if not hdf_filename:
-        hdf_filename = dg_filename.split(".")[0]+".hdf5"
+        hdf_filename = os.path.splitext(dg_filename)[0]+".hdf5"  # same place as source
+        print "Saving to",hdf_filename
     #Open an HDF file and call the converter based on having an HDF5 File object
     with h5py.File(file_path+hdf_filename,'w') as write_file:
-        fconvert_h5py_hdffile(dg_filename,write_file)
+        fconvert_h5py_hdffile(dg_filename,write_file,file_path)
 
 class LocationInfo():
     '''Class to store information about a given location.  No methods.
@@ -179,7 +182,7 @@ def fcreate_datasets_coord_header(hdf_group,coord_header,max_replicates,num_loca
         hdf_group.create_dataset(string_key,shape=(num_locations,max_replicates),dtype=dtype_string)
     return numeric_header_keys, string_header_keys
 
-def fconvert_h5py_hdffile(dg_filename,write_file):
+def fconvert_h5py_hdffile(dg_filename,write_file,file_path=""):
     '''Convert DataGrabber file to HDF5.
     Input:
     dg_filename: name of DataGrabber file, not prepended with path.
@@ -256,17 +259,23 @@ def fconvert_h5py_hdffile(dg_filename,write_file):
         coord = ""
         loc_info = ""
 
-def fbatch_conversion(file_nums):
+def fbatch_conversion(file_nums,file_path=""):
     '''Class to batch process a large number of DataGrabber files.
-    Should work with strings or numbers given in file_nums list.
+    Should work with strings or numbers given in file_nums list. (ie [100, 101, 102 ])
+    DD added wildcard support when a single string is given in file_nums. This allows you to pass "Scans/Scan_1*.dat" for example.
     '''
     #Loop through the input string numbers, converting first to int, then to
     #correct number of digits as a string.
     filenames = []
-    for i_str in file_nums:
-        i = int(i_str)
-        format_string = '{0:0'+str(digits)+'d}'
-        filenames.append(dg_filename_prefix+format_string.format(i)+dg_filename_suffix)
+    if isinstance(file_nums,basestring):
+        import glob
+        filenames = glob.glob(file_nums)
+        print file_nums
+    else:
+        for i_str in file_nums:
+            i = int(i_str)
+            format_string = '{0:0'+str(digits)+'d}'
+            filenames.append(file_path+dg_filename_prefix+format_string.format(i)+dg_filename_suffix)
     #Make a JoinableQueue to hold tasks
     tasks = multiprocessing.JoinableQueue()
     #Set up processes
@@ -307,7 +316,7 @@ class MP_Process(multiprocessing.Process):
             self.task_queue.task_done()
         return
 
-def fbatch_conversion_serial(file_nums):
+def fbatch_conversion_serial(file_nums,file_path=""):
     '''Class to batch process a large number of DataGrabber files.
     Should work with strings or numbers given in file_nums list.
     '''
@@ -317,7 +326,7 @@ def fbatch_conversion_serial(file_nums):
         i = int(i_str)
         format_string = '{0:0'+str(digits)+'d}'
         fconvert_file(dg_filename_prefix+format_string.format(i)+dg_filename_suffix,
-                    hdf_filename)
+                    hdf_filename,file_path)
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
