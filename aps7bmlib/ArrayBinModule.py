@@ -5,6 +5,8 @@ using a prespecified time for each bin.
 Alan Kastengren, XSD, APS
 
 Started: June 8, 2016
+
+Edits: July 21, 2018 - DD enforced types going into cython module in fbin_signal_fixed_time
 '''
 import ArrayBin_Cython as arc
 import numpy as np
@@ -130,9 +132,9 @@ def fbin_signal_fixed_time(input_array,delta_t,pulse_time=None,repeat_num=None,s
     #Compute the number of points (float) per bin
     pulse_duration_points = pulse_time / delta_t
     #Compute the start point for the integration
-    start_point = np.rint(start_time / delta_t)
-    #Perform integration with Cython code
-    output_data = arc.fbin_array(input_array[start_point:],pulse_duration_points)
+    start_point = np.rint(start_time / delta_t).astype(np.int)  # <-- DD enforced int type for slicing
+    #Perform integration with Cython code. DD enforced numpy.float data type on input !
+    output_data = arc.fbin_array(input_array[start_point:].astype(np.float),pulse_duration_points)
     #Attempt to remove the impact of bunch charge variations.
     if repeat_num > 1:
         output_data = fremove_bunch_charge_variations(output_data,repeat_num)
