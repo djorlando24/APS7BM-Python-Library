@@ -30,7 +30,7 @@ hdf_filename=None
 digits=4
 location_keys = ("X","Y")
 convert_volts=True
-processors=4
+processors=3
 location_tolerance = 3e-3   #How close must coordinates be to be considered the same.
 write_datatype = 'f4'
 #

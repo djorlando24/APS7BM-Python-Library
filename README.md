@@ -2,7 +2,10 @@
 
 APS 7BM Python-Library has been forked by DD to make modifications to setup.py for system-agnostic cython compilation, and create a proper importable python module called "aps7bmlib" that can be used system-wide.
 
-To access a module from anywhere on your system in python, you can then call "import aps7bmlib" and run a function such as "aps7bmlib.Combine_Scans.fprocess_files(args)".
+To access a module from anywhere on your system in python, you can then call "from aps7bmlib import <file>".
+For example:
+>> from aps7mblib import Combine_Scans
+>> Combine_Scans.fprocess_files(**kwargs)
 
 -- To install aps7bmlib system wide, do "python setup.py install"
 
