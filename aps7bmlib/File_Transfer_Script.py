@@ -1,7 +1,11 @@
 '''Script to transfer files and convert to HDF5.
 '''
 import MDA2HDF5_Fluorescence as m2h
-import epics
+try:
+    import epics
+except ImportError:
+    print "Could not load pyEpics. This script only runs on APS beamline computers."
+    exit()
 import time
 import shutil
 #

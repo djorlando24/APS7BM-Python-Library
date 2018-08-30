@@ -32,7 +32,11 @@ from scipy import optimize
 from scipy import interpolate
 import scipy.integrate
 import logging
-import abel
+
+try:
+    import abel
+except ImportError:
+    print "Unable to load PyAbel - see https://github.com/PyAbel/PyAbel"
 
 
 #Set up logging
@@ -76,6 +80,11 @@ class SigTrapData():
         self.z_vals = None
         self.density_2D_corrected = None
         self.y_corrected = None
+
+        if abel and not 'abel' in dir():
+            print "Unable to load PyAbel - this feature will be disabled"
+            abel=False
+        
         self.abel = abel
         
     def ffit_projection(self):
