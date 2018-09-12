@@ -8,7 +8,5 @@ For example:
 >> Combine_Scans.fprocess_files(**kwargs)
 
 -- To install aps7bmlib system wide, do "python setup.py install"
-
 -- To install aps7bmlib for your local user account , do "python setup.py install --user"
-
 -- To install aps7bmlib in the local directory only, do "python setup.py develop"
