@@ -270,7 +270,7 @@ def fread_extra_PVs(data, group):
     return
 
 def fcheck_directories(input_MDA, MDA_directory, HDF_directory):
-    '''Checks that we have valid files for readin and writing.
+    '''Checks that we have valid files for reading and writing.
     '''
     # If the MDA directory isn't specified, assume it's the current directory.
     if not MDA_directory:
@@ -313,7 +313,7 @@ def frun_append(input_MDA='7bmb1_0260.mda', MDA_directory=None,
                 output_HDF='Scan_260.hdf5', HDF_directory=None):
     '''Parses data from the MDA file, adding datasets to an existing HDF5 file.
     '''
-    MDA_directory, HDF_directory = fcheck_directories(input_file, MDA_directory, HDF_directory)
+    MDA_directory, HDF_directory = fcheck_directories(input_MDA, MDA_directory, HDF_directory)
     if not os.path.isfile(HDF_directory + output_HDF):
         logger.error("File " + output_HDF + " cannot be opened for appending.  Exiting.")
         raise IOError
